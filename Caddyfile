@@ -1,0 +1,27 @@
+{$CADDY_HOST}
+tls {$CADDY_EMAIL}
+
+basicauth /upload {$CADDY_USERNAME} {$CADDY_PASSWORD}
+basicauth /download {$CADDY_USERNAME} {$CADDY_PASSWORD}
+
+root {$CADDY_ROOT}
+
+proxy /download 127.0.0.1 {
+	without /download
+}
+
+upload /upload {
+ 	to "{$CADDY_ROOT}"
+ 	yes_without_tls
+}
+
+filemanager /browse {$CADDY_ROOT} {
+	database {$HOME}/data
+}
+
+# Facilitate large (1tb+) files
+timeouts none
+
+# Nothing is outputted without this
+log stdout
+errors stderr
